@@ -1,5 +1,6 @@
 package com.example.ejemploadapterconlista
 
+import android.content.Intent
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ class StringAdapter(var listaString : MutableList<String>) : RecyclerView.Adapte
 
     class StringViewHolder(var root: View, var textView: TextView) : RecyclerView.ViewHolder(root)
 
+    private lateinit var recyclerView : RecyclerView
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StringViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
         val twTextView = view.findViewById<TextView>(R.id.textView)
@@ -20,6 +23,11 @@ class StringAdapter(var listaString : MutableList<String>) : RecyclerView.Adapte
 
     override fun getItemCount(): Int {
         return listaString.size + 1
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
     }
 
     override fun onBindViewHolder(holder: StringViewHolder, position: Int) {
@@ -40,6 +48,10 @@ class StringAdapter(var listaString : MutableList<String>) : RecyclerView.Adapte
         } else {
             holder.textView.text = "${listaString[position]} y Soy Impar"
             holder.textView.setBackgroundColor(holder.textView.context.getColor(R.color.teal_700))
+        }
+        holder.root.setOnClickListener {
+            val pos = recyclerView.getChildLayoutPosition(it)
+            SecondActivity.createSecondActivity(it.context, listaString[pos])
         }
 
     }
